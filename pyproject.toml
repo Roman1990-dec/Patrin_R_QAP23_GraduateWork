@@ -1,0 +1,45 @@
+[project]
+name = "Patrin.R_QAP23"
+version = "0.1.0"
+description = "Дипломная работа по курсу Автоматизированное тестирование на Python"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "ruff>=0.14.0",
+    "pytest>=8.4.0",
+    "mypy>=1.16.0",
+    "requests>=2.34.2",
+    "selenium>=4.44.0",
+    "webdriver-manager>=4.1.1",
+    "pytest-playwright>=0.8.0",
+    "allure-python-commons>=2.16.0",
+    "allure-pytest>=2.16.0",
+]
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "W", "I", "UP", "B", "C4"]
+ignore = ["E501"]
+fixable = ["ALL"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "-v --tb=short"
+
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+strict_optional = true
+warn_no_return = true
+warn_redundant_casts = true
