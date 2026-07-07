@@ -6,6 +6,7 @@ from pages.cart_page import CartPage
 class TestCart:
 
     def test_add_item_to_cart(self, page, base_url):
+        """Тест проверяет добаление товара"""
         login_page = LoginPage(page, base_url)
         login_page.open().login("rptest@mail.com", "123456!")
         page.wait_for_url("https://demowebshop.tricentis.com/", timeout=5000)

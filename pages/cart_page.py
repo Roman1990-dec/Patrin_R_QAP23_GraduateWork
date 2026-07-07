@@ -5,6 +5,9 @@ class CartPage(BasePage):
     QUANTITY_INPUT = ".qty-input"
     UPDATE_CART_BUTTON = "input[name='updatecart']"
     EMPTY_CART_MESSAGE = ".order-summary-content"
+    TERMS_CHECKBOX = "#termsofservice"
+    CHECKOUT_BUTTON = "button#checkout"
+    
 
     def open(self):
         """Открывает страницу корзины."""
@@ -32,3 +35,14 @@ class CartPage(BasePage):
         """Проверяет, пуста ли корзина."""
         text = self.page.locator(self.EMPTY_CART_MESSAGE).text_content()
         return "Your Shopping Cart is empty!" in text
+
+    def agree_to_terms(self):
+        """Ставит галочку 'I agree with the terms of service'."""
+        self.click(self.TERMS_CHECKBOX)
+        return self
+
+    def proceed_to_checkout(self):
+        """Переход к оформлению заказа (предварительно нужно согласиться с условиями)."""
+        self.click(self.CHECKOUT_BUTTON)
+        from pages.checkout_page import CheckoutPage
+        return CheckoutPage(self.page, self.base_url)
