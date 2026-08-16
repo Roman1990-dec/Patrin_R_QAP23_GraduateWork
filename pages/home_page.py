@@ -5,13 +5,14 @@ class HomePage(BasePage):
 
     def open(self):
         super().open("/")
-        self.page.wait_for_selector(".top-menu", state="visible", timeout=10000)
+        self.page.wait_for_selector(".top-menu", state="visible", timeout=3000)
         return self
 
     def go_to_books_category(self):
         self.click(self.BOOKS_CATEGORY_LINK)
         # Ждём полной загрузки страницы (включая динамические элементы)
         self.page.wait_for_load_state("networkidle")
-        self.page.wait_for_selector(".product-grid", state="visible", timeout=10000)
+        # Ждём полной загрузки сетки товаров
+        self.page.wait_for_selector(".product-grid", state="visible", timeout=3000)
         from pages.books_page import BooksPage
         return BooksPage(self.page, self.base_url)
