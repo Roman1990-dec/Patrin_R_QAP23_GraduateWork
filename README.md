@@ -82,7 +82,7 @@ def base_url():
 
 ```
 
-## Запуск тестов (без Docker) <img src="https://cdn.jsdelivr.net/npm/@primer/octicons@17.12.0/build/svg/play-16.svg" width="24" height="24" alt="Run tests">
+## <img src="https://cdn.jsdelivr.net/npm/@primer/octicons@17.12.0/build/svg/beaker-16.svg" width="24" height="24" alt="Tests"> Запуск тестов (без Docker) 
 
 ### 1. Запуск всех тестов
 
@@ -130,7 +130,7 @@ def base_url():
 
 ## Дополнительные возможности
 
-## Docker <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" width="40" height="40" alt="Docker">
+## <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" width="40" height="40" alt="Docker"> Docker
 ### Запуск через Docker
 Для изолированного и воспроизводимого запуска тестов вы можете использовать Docker. В проекте подготовлены Dockerfile и docker-compose.yml.
 
