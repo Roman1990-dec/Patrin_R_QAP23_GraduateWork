@@ -51,9 +51,11 @@
 ### 4. Настройка переменных окружения
 
 В файле conftest.py задан базовый URL тестируемого сайта. При необходимости его можно изменить:
+```
 @pytest.fixture(scope="session")
 def base_url():
     return "https://demowebshop.tricentis.com"
+```
 
 ## Структура проекта
 
