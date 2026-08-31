@@ -1,5 +1,11 @@
 # Автоматизация тестирования интернет-магазина Demo Web Shop
 
+## Автор
+Студент: Патрин Р.
+Группа: QAP23-onl
+Учебное заведение: [TeachMeSkills — онлайн-школа IT-профессий]
+Дата: 2026
+
 ## Описание проекта
 
 Данный проект разработан в рамках дипломной работы по курсу **Автоматизированное тестирование на Python**.  
@@ -22,7 +28,7 @@
 Для работы с проектом необходимо установить:
 
 - Python 3.13 или выше
-- pip (менеджер пакетов Python)
+- uv (менеджер пакетов)
 - Playwright и браузеры (Chromium, Firefox, WebKit)
 - Allure командной строки (для генерации отчётов)
 
@@ -30,11 +36,97 @@
 
 ### 1. Клонирование репозитория
 
-git clone <url-репозитория>
-cd Patrin_R_QAP23_GraduateWork
+- git clone <url-репозитория>
+- cd Patrin_R_QAP23_GraduateWork
 
-### 2. Создание виртуального окружения
+### 2. Установка зависимостей через UV
 
-python -m venv .venv
-source .venv/bin/activate       # для Linux/Mac
-.venv\Scripts\activate          # для Windows
+- uv sync
+
+### 3. Установка браузеров Playwright
+
+- playwright install chromium
+
+### 4. Настройка переменных окружения
+
+В файле conftest.py задан базовый URL тестируемого сайта. При необходимости его можно изменить:
+@pytest.fixture(scope="session")
+def base_url():
+    return "https://demowebshop.tricentis.com"
+
+## Структура проекта
+
+.
+├── conftest.py                 # Глобальные фикстуры и хуки Allure
+├── pages/                      # Page Object'ы
+│   ├── base_page.py            # Базовый класс с общими методами
+│   ├── home_page.py            # Главная страница
+│   ├── login_page.py           # Страница входа
+│   ├── registration_page.py    # Страница регистрации
+│   ├── digital_downloads_page.py  # Страница категории Digital downloads
+│   ├── product_page.py         # Страница товара
+│   └── password_recovery_page.py # Страница восстановления пароля
+├── tests/                      # Тестовые сценарии
+│   ├── test_home.py            # Тесты главной страницы
+│   ├── test_login.py           # Тесты авторизации
+│   ├── test_registration.py    # Тесты регистрации
+│   ├── test_password_recovery.py # Тесты восстановления пароля
+│   └── test_digital_downloads.py # Тесты раздела Digital downloads
+├── .gitignore                  # Исключаемые файлы из Git
+├── pyproject.toml              # Описание проекта и зависимостей
+├── uv.lock                     # Фиксация версий зависимостей
+└── README.md                   # Документация проекта
+
+## Запуск тестов
+
+### 1.Запуск всех тестов
+
+- pytest tests/ -v
+
+### 2.Запуск конкретного тестового файла
+
+- pytest tests/test_login.py -v
+
+### 3.Запуск конкретного теста
+
+- pytest tests/test_login.py::TestLogin::test_successful_login -v
+
+### 4.Запуск с генерацией Allure-результатов
+
+- pytest tests/ --alluredir=allure-results
+
+### 5. Генерация Allure-отчёта
+
+- allure generate allure-results -o allure-report --clean
+- allure open allure-report
+
+## Используемые подходы и паттерны
+
+### Page Object Model (POM)
+
+Каждая страница сайта представлена отдельным классом-наследником BasePage. Внутри классов хранятся локаторы элементов и методы взаимодействия с ними. Это обеспечивает:
+- Переиспользование кода
+- Лёгкость поддержки при изменении вёрстки
+- Читаемость тестов
+
+### Фикстуры pytest
+
+В conftest.py определены фикстуры:
+- page – создание новой страницы браузера для каждого теста (с автоматическим закрытием)
+- base_url – базовый адрес сайта
+
+### Allure-декораторы
+Каждый тест снабжён декораторами:
+
+- @allure.feature – группировка по функциональным областям
+- @allure.story – детализация сценария
+- @allure.title – понятное название теста
+- @allure.severity – указание важности (CRITICAL, NORMAL, MINOR)
+
+## Дополнительные возможности (опционально)
+
+### Docker
+Для запуска тестов в изолированном контейнере можно создать Dockerfile и docker-compose.yml. 
+
+### CI/CD (GitHub Actions)
+Настройка автоматического запуска тестов при пуше в репозиторий может быть выполнена с помощью GitHub Actions.
