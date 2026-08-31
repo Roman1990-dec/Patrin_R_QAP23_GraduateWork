@@ -128,9 +128,9 @@ def base_url():
 - @allure.title – понятное название теста
 - @allure.severity – указание важности (CRITICAL, NORMAL, MINOR)
 
-## Дополнительные возможности
+## Дополнительные возможности:
 
-## <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" width="40" height="40" alt="Docker"> Docker
+## 🐳 Docker
 ### Запуск через Docker
 Для изолированного и воспроизводимого запуска тестов вы можете использовать Docker. В проекте подготовлены Dockerfile и docker-compose.yml.
 
@@ -154,5 +154,5 @@ def base_url():
 
 Для запуска тестов в изолированном контейнере можно создать Dockerfile и docker-compose.yml. 
 
-### CI/CD (GitHub Actions)
+## 🚀 CI/CD (GitHub Actions)
 Настройка автоматического запуска тестов при пуше в репозиторий может быть выполнена с помощью GitHub Actions.
