@@ -30,7 +30,6 @@
 
 ### 1. Клонирование репозитория
 
-```bash
 git clone <url-репозитория>
 cd Patrin_R_QAP23_GraduateWork
 
