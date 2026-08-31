@@ -1,3 +1,4 @@
+import os
 import allure
 import pytest
 from playwright.sync_api import Page, sync_playwright
@@ -5,17 +6,13 @@ from playwright.sync_api import Page, sync_playwright
 
 @pytest.fixture(scope="function")
 def page():
-    """Создаёт новую страницу браузера для каждого теста"""
+    # Проверяем переменную окружения HEADLESS (по умолчанию False)
+    headless = os.environ.get("HEADLESS", "false").lower() == "true"
     with sync_playwright() as p:
-        # Запускаем браузер (headless=False, чтобы видеть браузер при отладке)
-        browser = p.chromium.launch(headless=False)
-        # Создаёт новый контекст браузера — изолированную среду с собственными куками, локальным хранилищем, сессиями
+        browser = p.chromium.launch(headless=headless)
         context = browser.new_context()
-        # Открывает новую вкладку (страницу) внутри этого контекста
         page = context.new_page()
-        # возвращает объект page в тест, но при этом функция не завершается — она «замораживается» и ждёт, пока тест завершится
         yield page
-        # После теста закрываем контекст и браузер, чтобы освободить ресурсы (память, процессы)
         context.close()
         browser.close()
 
