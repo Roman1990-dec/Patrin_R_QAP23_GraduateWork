@@ -41,3 +41,10 @@ class LoginPage(BasePage):
     def open(self):
         """Открывает страницу логина"""
         return super().open("/login")
+
+    def click_forgot_password(self):
+        """Кликает по ссылке 'Forgot password?' и возвращает объект PasswordRecoveryPage."""
+        self.click(".forgot-password a")
+        from pages.password_recovery_page import PasswordRecoveryPage
+
+        return PasswordRecoveryPage(self.page, self.base_url)
