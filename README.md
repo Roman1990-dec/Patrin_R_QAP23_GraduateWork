@@ -82,7 +82,7 @@ def base_url():
 
 ```
 
-## <img src="https://cdn.jsdelivr.net/npm/@primer/octicons@17.12.0/build/svg/beaker-16.svg" width="24" height="24" alt="Tests"> Запуск тестов (без Docker) 
+## 🧪 Запуск тестов (без Docker) 
 
 ### 1. Запуск всех тестов
 
