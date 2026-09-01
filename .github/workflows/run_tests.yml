@@ -1,0 +1,64 @@
+name: Run Playwright Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Клонируем репозиторий
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Устанавливаем Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      # 3. Устанавливаем uv
+      - name: Install uv
+        run: pip install uv
+
+      # 4. Устанавливаем зависимости (uv sync)
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      # 5. Устанавливаем браузер Playwright (Chromium) в headless-режиме
+      - name: Install Playwright browsers
+        run: uv run playwright install chromium
+
+      # 6. Запускаем тесты с Allure-результатами
+      - name: Run tests
+        run: uv run pytest tests/ --alluredir=allure-results
+        env:
+          HEADLESS: true   # обязательный headless-режим в CI
+
+      # 7. Сохраняем Allure-результаты как артефакт (для последующего просмотра)
+      - name: Upload Allure results
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+          retention-days: 7
+
+      # 8. (Опционально) Генерируем Allure-отчёт и публикуем его на GitHub Pages
+      - name: Generate Allure report
+        if: always()   # генерируем даже при падении тестов
+        run: |
+          npm install -g allure-commandline   # устанавливаем Allure CLI
+          allure generate allure-results -o allure-report --clean
+
+      - name: Deploy report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
+          destination_dir: ./allure-report
+          keep_files: false
