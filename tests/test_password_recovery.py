@@ -10,8 +10,6 @@ class TestPasswordRecovery:
     @allure.title("Кейс 1: Проверка ссылки, перехода и ошибки при пустом email")
     @allure.severity(allure.severity_level.NORMAL)
     def test_forgot_password_link_and_empty_email(self, page, base_url):
-        """Кейс 1: Проверка, что ссылка 'Forgot password?' ведёт на страницу восстановления,
-        и при пустом email появляется ошибка 'Enter your email'."""
         # 1. Открываем страницу логина
         login_page = LoginPage(page, base_url)
         login_page.open()
@@ -42,7 +40,6 @@ class TestPasswordRecovery:
     @allure.title("Кейс 2: Успешное восстановление с существующим email")
     @allure.severity(allure.severity_level.CRITICAL)
     def test_password_recovery_existing_email(self, page, base_url):
-        """Кейс 2: Ввод существующего email -> получение сообщения об отправке инструкций."""
         # 1. Переходим напрямую на страницу восстановления
         recovery_page = PasswordRecoveryPage(page, base_url)
         recovery_page.open()
@@ -60,7 +57,6 @@ class TestPasswordRecovery:
     @allure.title("Кейс 3: Восстановление с несуществующим email")
     @allure.severity(allure.severity_level.NORMAL)
     def test_password_recovery_nonexistent_email(self, page, base_url):
-        """Кейс 3: Ввод несуществующего email -> получение сообщения 'Email not found'."""
         recovery_page = PasswordRecoveryPage(page, base_url)
         recovery_page.open()
 

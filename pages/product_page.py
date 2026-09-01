@@ -2,6 +2,7 @@ from pages.base_page import BasePage
 
 
 class ProductPage(BasePage):
+    # Локаторы
     PRODUCT_NAME = ".product-name h1"
     PRODUCT_PRICE = ".product-price"
     ADD_TO_CART_BUTTON = ".button-1.add-to-cart-button"

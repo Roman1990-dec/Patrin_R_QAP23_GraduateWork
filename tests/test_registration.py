@@ -15,7 +15,6 @@ class TestRegistration:
         "Проверяет, что новый пользователь может зарегистрироваться и автоматически войти"
     )
     def test_successful_registration(self, page, base_url):
-        """Кейс №6: Успешная регистрация нового пользователя."""
         register_page = RegistrationPage(page, base_url)
         register_page.open()
 
@@ -35,7 +34,7 @@ class TestRegistration:
 
         # Проверяем, что пользователь автоматически вошёл (появился email и Log out)
         login_page = LoginPage(page, base_url)
-        # Можно проверить, что в хедере появился email (используем уже знакомый локатор)
+        # Проверяем, что в хедере появился email
         assert login_page.is_logged_in(), (
             "Пользователь не авторизован после регистрации"
         )
@@ -48,11 +47,10 @@ class TestRegistration:
         "Проверяет, что при попытке зарегистрироваться с существующим email появляется ошибка"
     )
     def test_registration_existing_email(self, page, base_url):
-        """Кейс №7: Регистрация с уже существующим email."""
         register_page = RegistrationPage(page, base_url)
         register_page.open()
 
-        # Используем уже зарегистрированный email (например, rptest@mail.com)
+        # Используем уже зарегистрированный email
         register_page.register(
             first_name="Test",
             last_name="User",
@@ -92,7 +90,6 @@ class TestRegistration:
         "Проверяет, что при отправке формы без email, пароля и подтверждения появляются ошибки валидации"
     )
     def test_registration_empty_fields(self, page, base_url):
-        """Кейс №9: Регистрация с пустыми обязательными полями."""
         register_page = RegistrationPage(page, base_url)
         register_page.open()
 

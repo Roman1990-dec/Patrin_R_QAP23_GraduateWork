@@ -31,7 +31,7 @@ class DigitalDownloadsPage(BasePage):
         return self.page.locator(self.PRODUCT_ITEMS).count()
 
     def open_product_by_href(self, href: str):
-        """Открывает товар по его href (например, '/album-3'), кликая по текстовой ссылке."""
+        """Открывает товар по его href, кликая по текстовой ссылке."""
         # Ищем ссылку внутри .product-title, чтобы избежать ссылки на картинку
         self.click(f".product-title a[href='{href}']")
         self.page.wait_for_load_state("networkidle")

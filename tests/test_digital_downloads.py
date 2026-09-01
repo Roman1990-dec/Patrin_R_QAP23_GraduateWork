@@ -12,7 +12,6 @@ class TestDigitalDownloads:
         self.home_page.open()
         self.downloads_page = self.home_page.go_to_digital_downloads()
 
-    # ------ Тесты для страницы списка (кейсы 1-6) ------
     @allure.story("Навигация")
     @allure.title("Переход в раздел Digital downloads")
     @allure.severity(allure.severity_level.NORMAL)
@@ -57,7 +56,6 @@ class TestDigitalDownloads:
         count = self.downloads_page.get_product_count()
         assert count > 0, "На странице нет товаров"
 
-    # ------ Тесты для карточки товара (кейсы 7-12) ------
     @allure.story("Карточка товара")
     @allure.title("Открытие карточки '3rd Album'")
     @allure.severity(allure.severity_level.NORMAL)

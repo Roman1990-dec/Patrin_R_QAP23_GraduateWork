@@ -2,8 +2,7 @@ from pages.base_page import BasePage
 
 
 class LoginPage(BasePage):
-    """Page Object для страницы авторизации (/login)"""
-
+    # Локаторы
     EMAIL_INPUT = "#Email"
     PASSWORD_INPUT = "#Password"
     LOGIN_BUTTON = "input[value='Log in']"

@@ -65,7 +65,6 @@ class TestHomePage:
         ],
     )
     def test_top_menu_navigation(self, link_text, expected_path):
-        """Кейс №13: Проверка перехода по пунктам верхнего меню."""
         link_selector = f".top-menu a[href='{expected_path}']"
         self.home_page.click(link_selector)
         self.home_page.page.wait_for_url(
@@ -79,7 +78,6 @@ class TestHomePage:
     @allure.title("Поиск существующего товара")
     @allure.severity(allure.severity_level.NORMAL)
     def test_search_existing_product(self):
-        """Кейс №14: Поиск товара 'computer'."""
         search_input = "#small-searchterms"
         search_button = "input[value='Search']"
         self.home_page.fill(search_input, "computer")
@@ -96,7 +94,6 @@ class TestHomePage:
     @allure.title("Поиск несуществующего товара")
     @allure.severity(allure.severity_level.NORMAL)
     def test_search_nonexistent_product(self):
-        """Кейс №15: Поиск товара 'nonexistent'."""
         search_input = "#small-searchterms"
         search_button = "input[value='Search']"
         self.home_page.fill(search_input, "nonexistent")
@@ -113,7 +110,6 @@ class TestHomePage:
     @allure.title("Проверка блока Newsletter")
     @allure.severity(allure.severity_level.MINOR)
     def test_newsletter_block_visible(self):
-        """Кейс №16: Проверка видимости поля email и кнопки Subscribe."""
         assert self.home_page.is_visible("#newsletter-email"), "Поле email не видно"
         assert self.home_page.is_visible("input[value='Subscribe']"), (
             "Кнопка Subscribe не видна"
@@ -123,8 +119,7 @@ class TestHomePage:
     @allure.title("Проверка блока Community Poll")
     @allure.severity(allure.severity_level.NORMAL)
     def test_community_poll_visible(self):
-        """Кейс №17: Проверка наличия вопроса, всех радиокнопок и их текстов."""
-        # 1. Проверяем текст вопроса (ищем по тексту, так как селектор может отличаться)
+        # 1. Проверяем текст вопроса
         question_text = self.home_page.page.locator(
             "text=Do you like nopCommerce?"
         ).text_content()
@@ -165,7 +160,6 @@ class TestHomePage:
         ],
     )
     def test_community_poll_vote_without_login(self, option_id, option_text):
-        """Кейс №21: Проверка, что голосование без логина показывает сообщение 'Only registered users can vote'."""
         # Открываем главную страницу (без логина)
         self.home_page.open()
 
@@ -188,7 +182,6 @@ class TestHomePage:
     @allure.title("Проверка блока Featured Products")
     @allure.severity(allure.severity_level.NORMAL)
     def test_featured_products_visible(self):
-        """Кейс №18: Проверка, что в блоке Featured Products есть товары."""
         items = self.home_page.page.locator(".product-item").count()
         assert items > 0, "В блоке Featured Products нет товаров"
 
@@ -196,7 +189,6 @@ class TestHomePage:
     @allure.title("Проверка блока Popular Tags")
     @allure.severity(allure.severity_level.MINOR)
     def test_popular_tags_visible(self):
-        """Кейс №19: Проверка, что теги отображаются."""
         tags = self.home_page.page.locator("a[href^='/producttag/']").count()
         assert tags > 0, "Теги не найдены"
 
@@ -204,7 +196,6 @@ class TestHomePage:
     @allure.title("Проверка ссылки 'View all' в блоке Popular Tags")
     @allure.severity(allure.severity_level.NORMAL)
     def test_popular_tags_view_all_link(self):
-        """Кейс №22: Проверка, что ссылка 'View all' ведёт на /producttag/all."""
         # Находим ссылку "View all" внутри блока .view-all
         view_all_link = ".view-all a"
         # Проверяем, что ссылка видна
@@ -224,7 +215,6 @@ class TestHomePage:
     @allure.title("Проверка наличия тега 'digital' и перехода по нему")
     @allure.severity(allure.severity_level.NORMAL)
     def test_popular_tags_digital_tag(self):
-        """Кейс №23: Проверка, что тег 'digital' присутствует и ведёт на /producttag/16/digital."""
         # Ожидаем появления блока с тегами
         self.home_page.page.wait_for_selector(".tags", state="visible", timeout=5000)
 
@@ -247,7 +237,6 @@ class TestHomePage:
         )
 
         # 4. Проверяем, что на странице отображаются товары, связанные с тегом "digital"
-        # (на основе вашего скриншота — там должны быть товары)
         self.home_page.page.wait_for_selector(
             ".product-item", state="visible", timeout=5000
         )
@@ -268,8 +257,7 @@ class TestHomePage:
         ],
     )
     def test_footer_links_navigation(self, link_text, expected_path):
-        """Кейс №20: Проверка перехода по ссылкам в нижнем колонтитуле."""
-        # Ищем ссылку в футере (обычно она находится внутри div.footer или внизу страницы)
+        # Ищем ссылку в футере
         link_selector = f".footer a:has-text('{link_text}')"
         self.home_page.click(link_selector)
         self.home_page.page.wait_for_url(

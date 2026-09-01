@@ -2,6 +2,7 @@ from pages.base_page import BasePage
 from playwright._impl._errors import TimeoutError
 
 class RegistrationPage(BasePage):
+    # Локаторы
     GENDER_MALE = "#gender-male"
     GENDER_FEMALE = "#gender-female"
     FIRST_NAME = "#FirstName"

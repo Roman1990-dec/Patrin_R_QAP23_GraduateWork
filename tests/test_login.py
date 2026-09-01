@@ -12,7 +12,6 @@ class TestLogin:
         "Проверяет, что пользователь может войти с корректными email и паролем"
     )
     def test_successful_login(self, page, base_url):
-        """Тест проверяет успешный вход с валидными данными"""
         login_page = LoginPage(page, base_url)
         login_page.open().login("rptest@mail.com", "123456!")
         page.wait_for_timeout(3000)
@@ -28,7 +27,6 @@ class TestLogin:
         "Проверяет, что при неверном пароле появляется сообщение об ошибке"
     )
     def test_invalid_password(self, page, base_url):
-        """Тест проверяет, что при неверном пароле появляется сообщение об ошибке"""
         login_page = LoginPage(page, base_url)
         login_page.open().login("rptest@mail.com", "wrong_password")
         error_text = login_page.get_error_message()
