@@ -1,0 +1,5 @@
+gitignore
+
+# Allure reports
+allure-results/
+allure-report/
