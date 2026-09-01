@@ -1,5 +1,6 @@
 from pages.base_page import BasePage
 
+
 class RegistrationPage(BasePage):
     GENDER_MALE = "#gender-male"
     GENDER_FEMALE = "#gender-female"
@@ -11,13 +12,15 @@ class RegistrationPage(BasePage):
     REGISTER_BUTTON = "#register-button"
 
     SUCCESS_MESSAGE = ".result"
-    ERROR_SELECTORS = [   # <-- добавьте эту строку
+    ERROR_SELECTORS = [  # <-- добавьте эту строку
         ".validation-summary-errors li",
         ".field-validation-error",
-        ".message-error li"
+        ".message-error li",
     ]
 
-    def open(self):
+    def open(self, url: str = ""):
+        if url:
+            return super().open(url)
         return super().open("/register")
 
     def register(self, first_name, last_name, email, password, confirm_password=None):
@@ -39,7 +42,7 @@ class RegistrationPage(BasePage):
             try:
                 self.page.wait_for_selector(selector, state="visible", timeout=2000)
                 return self.page.locator(selector).first.text_content()
-            except:
+            except TimeoutError:
                 continue
         raise Exception("No error message found on the page")
 
@@ -56,7 +59,7 @@ class RegistrationPage(BasePage):
             )
             error_items = self.page.locator(".validation-summary-errors li").all()
             return [item.text_content() for item in error_items]
-        except:
+        except TimeoutError:
             # Если не нашлось, пробуем другой селектор (например, для клиентской валидации)
             try:
                 self.page.wait_for_selector(
@@ -64,7 +67,7 @@ class RegistrationPage(BasePage):
                 )
                 error_items = self.page.locator(".field-validation-error").all()
                 return [item.text_content() for item in error_items]
-            except:
+            except TimeoutError:
                 # Если ничего не найдено, пробуем собрать все элементы с классом 'error'
                 try:
                     error_elements = self.page.locator(".error").all()
@@ -74,7 +77,7 @@ class RegistrationPage(BasePage):
                             for el in error_elements
                             if el.is_visible()
                         ]
-                except:
+                except TimeoutError:
                     pass
                 return []
 

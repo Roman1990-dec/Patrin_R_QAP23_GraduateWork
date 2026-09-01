@@ -4,7 +4,7 @@ from playwright.sync_api import Page
 class BasePage:
     """Базовый класс для всех Page Object'ов."""
 
-    def __init__(self, page: Page, base_url: str = "https://demowebshop.tricentis.com"):
+    def __init__(self, page: Page, base_url : str = "https://demowebshop.tricentis.com"):
         self.page = page
         self.base_url = base_url
 

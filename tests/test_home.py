@@ -1,6 +1,8 @@
-import pytest
 import allure
+import pytest
+
 from pages.home_page import HomePage
+
 
 @allure.feature("Главная страница")
 class TestHomePage:
@@ -26,39 +28,52 @@ class TestHomePage:
     @allure.severity(allure.severity_level.NORMAL)
     def test_header_shopping_cart_link_visible(self):
         # Уточняем: ищем ссылку внутри блока header-links
-        assert self.home_page.is_visible("#topcartlink a.ico-cart"), "Ссылка Shopping cart не видна"
+        assert self.home_page.is_visible("#topcartlink a.ico-cart"), (
+            "Ссылка Shopping cart не видна"
+        )
 
     @allure.story("Хедер")
     @allure.title("Проверка ссылки 'Wishlist'")
     @allure.severity(allure.severity_level.NORMAL)
     def test_header_wishlist_link_visible(self):
-        assert self.home_page.is_visible(".header-links a.ico-wishlist"), "Ссылка Wishlist не видна"
+        assert self.home_page.is_visible(".header-links a.ico-wishlist"), (
+            "Ссылка Wishlist не видна"
+        )
 
     @allure.story("Хедер")
     @allure.title("Проверка поля поиска и кнопки Search")
     @allure.severity(allure.severity_level.NORMAL)
     def test_header_search_field_visible(self):
         assert self.home_page.is_visible("#small-searchterms"), "Поле поиска не видно"
-        assert self.home_page.is_visible("input[value='Search']"), "Кнопка Search не видна"
+        assert self.home_page.is_visible("input[value='Search']"), (
+            "Кнопка Search не видна"
+        )
 
     @allure.story("Навигация")
     @allure.title("Переход по пунктам верхнего меню")
     @allure.severity(allure.severity_level.NORMAL)
-    @pytest.mark.parametrize("link_text, expected_path", [
-        ("Books", "/books"),
-        ("Computers", "/computers"),
-        ("Electronics", "/electronics"),
-        ("Apparel & Shoes", "/apparel-shoes"),
-        ("Digital downloads", "/digital-downloads"),
-        ("Jewelry", "/jewelry"),
-        ("Gift Cards", "/gift-cards"),
-    ])
+    @pytest.mark.parametrize(
+        "link_text, expected_path",
+        [
+            ("Books", "/books"),
+            ("Computers", "/computers"),
+            ("Electronics", "/electronics"),
+            ("Apparel & Shoes", "/apparel-shoes"),
+            ("Digital downloads", "/digital-downloads"),
+            ("Jewelry", "/jewelry"),
+            ("Gift Cards", "/gift-cards"),
+        ],
+    )
     def test_top_menu_navigation(self, link_text, expected_path):
         """Кейс №13: Проверка перехода по пунктам верхнего меню."""
         link_selector = f".top-menu a[href='{expected_path}']"
         self.home_page.click(link_selector)
-        self.home_page.page.wait_for_url(f"{self.home_page.base_url}{expected_path}", timeout=5000)
-        assert expected_path in self.home_page.page.url, f"Ожидался путь {expected_path}, текущий URL: {self.home_page.page.url}"
+        self.home_page.page.wait_for_url(
+            f"{self.home_page.base_url}{expected_path}", timeout=5000
+        )
+        assert expected_path in self.home_page.page.url, (
+            f"Ожидался путь {expected_path}, текущий URL: {self.home_page.page.url}"
+        )
 
     @allure.story("Поиск")
     @allure.title("Поиск существующего товара")
@@ -70,7 +85,9 @@ class TestHomePage:
         self.home_page.fill(search_input, "computer")
         self.home_page.click(search_button)
         # Ждём появления результатов
-        self.home_page.page.wait_for_selector(".product-item", state="visible", timeout=5000)
+        self.home_page.page.wait_for_selector(
+            ".product-item", state="visible", timeout=5000
+        )
         # Проверяем, что есть хотя бы один товар
         items = self.home_page.page.locator(".product-item").count()
         assert items > 0, "Результаты поиска не найдены"
@@ -87,8 +104,10 @@ class TestHomePage:
         # Ожидаем сообщение об отсутствии результатов
         self.home_page.page.wait_for_selector(".result", state="visible", timeout=5000)
         result_text = self.home_page.page.locator(".result").text_content()
-        assert "No products were found" in result_text or "No products found" in result_text, \
-            f"Неожиданное сообщение: {result_text}"
+        assert (
+            "No products were found" in result_text
+            or "No products found" in result_text
+        ), f"Неожиданное сообщение: {result_text}"
 
     @allure.story("Блоки на главной")
     @allure.title("Проверка блока Newsletter")
@@ -96,7 +115,9 @@ class TestHomePage:
     def test_newsletter_block_visible(self):
         """Кейс №16: Проверка видимости поля email и кнопки Subscribe."""
         assert self.home_page.is_visible("#newsletter-email"), "Поле email не видно"
-        assert self.home_page.is_visible("input[value='Subscribe']"), "Кнопка Subscribe не видна"
+        assert self.home_page.is_visible("input[value='Subscribe']"), (
+            "Кнопка Subscribe не видна"
+        )
 
     @allure.story("Блоки на главной")
     @allure.title("Проверка блока Community Poll")
@@ -162,7 +183,7 @@ class TestHomePage:
         assert "Only registered users can vote" in error_text, (
             f"Неверное сообщение: {error_text}"
         )
-    
+
     @allure.story("Блоки на главной")
     @allure.title("Проверка блока Featured Products")
     @allure.severity(allure.severity_level.NORMAL)
@@ -236,17 +257,24 @@ class TestHomePage:
     @allure.story("Нижний колонтитул")
     @allure.title("Переход по ссылкам в нижнем колонтитуле")
     @allure.severity(allure.severity_level.NORMAL)
-    @pytest.mark.parametrize("link_text, expected_path", [
-        ("Sitemap", "/sitemap"),
-        ("About Us", "/about-us"),
-        ("Contact Us", "/contactus"),
-        ("Privacy Notice", "/privacy-policy"),
-        ("Conditions of Use", "/conditions-of-use"),
-    ])
+    @pytest.mark.parametrize(
+        "link_text, expected_path",
+        [
+            ("Sitemap", "/sitemap"),
+            ("About Us", "/about-us"),
+            ("Contact Us", "/contactus"),
+            ("Privacy Notice", "/privacy-policy"),
+            ("Conditions of Use", "/conditions-of-use"),
+        ],
+    )
     def test_footer_links_navigation(self, link_text, expected_path):
         """Кейс №20: Проверка перехода по ссылкам в нижнем колонтитуле."""
         # Ищем ссылку в футере (обычно она находится внутри div.footer или внизу страницы)
         link_selector = f".footer a:has-text('{link_text}')"
         self.home_page.click(link_selector)
-        self.home_page.page.wait_for_url(f"{self.home_page.base_url}{expected_path}", timeout=5000)
-        assert expected_path in self.home_page.page.url, f"Ожидался путь {expected_path}, текущий URL: {self.home_page.page.url}"
+        self.home_page.page.wait_for_url(
+            f"{self.home_page.base_url}{expected_path}", timeout=5000
+        )
+        assert expected_path in self.home_page.page.url, (
+            f"Ожидался путь {expected_path}, текущий URL: {self.home_page.page.url}"
+        )

@@ -1,5 +1,6 @@
 from pages.base_page import BasePage
 
+
 class PasswordRecoveryPage(BasePage):
     # Локаторы
     EMAIL_INPUT = "#Email"
@@ -7,8 +8,10 @@ class PasswordRecoveryPage(BasePage):
     RESULT_MESSAGE = ".result"
     VALIDATION_ERROR = ".field-validation-error"  # сообщение "Enter your email"
 
-    def open(self):
-        """Открывает страницу восстановления пароля напрямую."""
+    def open(self, url: str = ""):
+        """Открывает страницу восстановления пароля напрямую или переданный url."""
+        if url:
+            return super().open(url)
         return super().open("/passwordrecovery")
 
     def recover_password(self, email: str):

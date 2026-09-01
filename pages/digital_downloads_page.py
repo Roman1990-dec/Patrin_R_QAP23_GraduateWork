@@ -1,5 +1,6 @@
 from pages.base_page import BasePage
 
+
 class DigitalDownloadsPage(BasePage):
     # Локаторы
     PAGE_TITLE = ".page-title h1"
@@ -8,8 +9,10 @@ class DigitalDownloadsPage(BasePage):
     VIEW_AS_GRID = "#products-viewmode"
     PRODUCT_ITEMS = ".product-item"
 
-    def open(self):
-        """Открывает страницу Digital downloads напрямую."""
+    def open(self, url: str = ""):
+        """Открывает страницу Digital downloads напрямую или переданный url."""
+        if url:
+            return super().open(url)
         return super().open("/digital-downloads")
 
     def get_page_title(self) -> str:

@@ -1,17 +1,19 @@
-import pytest
 import time
+
 import allure
-from pages.registration_page import RegistrationPage
+
 from pages.login_page import LoginPage
+from pages.registration_page import RegistrationPage
 
 
 @allure.feature("Регистрация")
 class TestRegistration:
-
     @allure.story("Успешная регистрация")
     @allure.title("Регистрация нового пользователя")
     @allure.severity(allure.severity_level.CRITICAL)
-    @allure.description("Проверяет, что новый пользователь может зарегистрироваться и автоматически войти")
+    @allure.description(
+        "Проверяет, что новый пользователь может зарегистрироваться и автоматически войти"
+    )
     def test_successful_registration(self, page, base_url):
         """Кейс №6: Успешная регистрация нового пользователя."""
         register_page = RegistrationPage(page, base_url)
@@ -42,7 +44,9 @@ class TestRegistration:
     @allure.story("Негативные сценарии")
     @allure.title("Регистрация с уже существующим email")
     @allure.severity(allure.severity_level.NORMAL)
-    @allure.description("Проверяет, что при попытке зарегистрироваться с существующим email появляется ошибка")
+    @allure.description(
+        "Проверяет, что при попытке зарегистрироваться с существующим email появляется ошибка"
+    )
     def test_registration_existing_email(self, page, base_url):
         """Кейс №7: Регистрация с уже существующим email."""
         register_page = RegistrationPage(page, base_url)
@@ -64,7 +68,9 @@ class TestRegistration:
     @allure.story("Негативные сценарии")
     @allure.title("Регистрация с несовпадающими паролями")
     @allure.severity(allure.severity_level.NORMAL)
-    @allure.description("Проверяет, что при несовпадении пароля и подтверждения появляется ошибка")
+    @allure.description(
+        "Проверяет, что при несовпадении пароля и подтверждения появляется ошибка"
+    )
     def test_registration_password_mismatch(self, page, base_url):
         """Кейс №8: Регистрация с несовпадающими паролями."""
         register_page = RegistrationPage(page, base_url)
@@ -84,7 +90,9 @@ class TestRegistration:
     @allure.story("Негативные сценарии")
     @allure.title("Регистрация с пустыми обязательными полями")
     @allure.severity(allure.severity_level.NORMAL)
-    @allure.description("Проверяет, что при отправке формы без email, пароля и подтверждения появляются ошибки валидации")
+    @allure.description(
+        "Проверяет, что при отправке формы без email, пароля и подтверждения появляются ошибки валидации"
+    )
     def test_registration_empty_fields(self, page, base_url):
         register_page = RegistrationPage(page, base_url)
         register_page.open()

@@ -18,6 +18,8 @@ dependencies = [
 
 [tool.ruff]
 line-length = 88
+
+[tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "C4"]
 ignore = ["E501"]
 fixable = ["ALL"]

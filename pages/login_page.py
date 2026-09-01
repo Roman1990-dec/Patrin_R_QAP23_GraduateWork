@@ -1,5 +1,6 @@
 from pages.base_page import BasePage
 
+
 class LoginPage(BasePage):
     """Page Object для страницы авторизации (/login)"""
 
@@ -26,20 +27,24 @@ class LoginPage(BasePage):
         return self.is_visible(self.LOGOUT_LINK)
 
     def get_account_email(self) -> str:
-        """"Возвращает текст ссылки на аккаунт (email)"""
+        """ "Возвращает текст ссылки на аккаунт (email)"""
         return self.get_text(self.ACCOUNT_LINK)
 
     def is_account_correct(self, expected_email: str) -> bool:
-        """"Проверяет, видна ли ссылка аккаунта с корректным текстом (email)"""
+        """ "Проверяет, видна ли ссылка аккаунта с корректным текстом (email)"""
         try:
-            self.page.wait_for_selector(self.ACCOUNT_LINK, state="visible", timeout=3000)
+            self.page.wait_for_selector(
+                self.ACCOUNT_LINK, state="visible", timeout=3000
+            )
             actual_email = self.get_account_email()
             return actual_email == expected_email
-        except:
+        except TimeoutError:
             return False
 
-    def open(self):
-        """Открывает страницу логина"""
+    def open(self, url: str = ""):
+        """Открывает страницу логина (или переданный url, если указан)"""
+        if url:
+            return super().open(url)
         return super().open("/login")
 
     def click_forgot_password(self):

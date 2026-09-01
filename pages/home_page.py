@@ -1,7 +1,7 @@
 from pages.base_page import BasePage
 
-class HomePage(BasePage):
 
+class HomePage(BasePage):
     NEWSLETTER_EMAIL = "#newsletter-email"
     NEWSLETTER_SUBSCRIBE = "input[value='Subscribe']"
     POLL_RADIO = "#pollanswers-1"  # первый вариант ответа
