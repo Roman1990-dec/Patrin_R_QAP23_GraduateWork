@@ -4,7 +4,6 @@ from pages.base_page import BasePage
 
 
 class RegistrationPage(BasePage):
-
     def __init__(self, page: Page, base_url: str):
         super().__init__(page, base_url)
         self.gender_male = page.locator("#gender-male")

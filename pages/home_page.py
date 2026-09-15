@@ -4,7 +4,6 @@ from pages.base_page import BasePage
 
 
 class HomePage(BasePage):
-
     def __init__(self, page: Page, base_url: str):
         super().__init__(page, base_url)
         self.top_menu = page.locator(".top-menu")
@@ -90,7 +89,9 @@ class HomePage(BasePage):
         return self
 
     def is_search_field_visible(self) -> bool:
-        return self.is_visible(self.search_input) and self.is_visible(self.search_button)
+        return self.is_visible(self.search_input) and self.is_visible(
+            self.search_button
+        )
 
     def search(self, query: str) -> "HomePage":
         self.fill(self.search_input, query)
