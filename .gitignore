@@ -1,5 +1,8 @@
 gitignore
 
+# Virtual environment
+.venv/
+
 # Allure reports
 allure-results/
 allure-report/
