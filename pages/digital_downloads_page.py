@@ -4,7 +4,6 @@ from pages.base_page import BasePage
 
 
 class DigitalDownloadsPage(BasePage):
-    """Page Object для страницы категории Digital downloads."""
 
     def __init__(self, page: Page, base_url: str):
         super().__init__(page, base_url)
