@@ -12,238 +12,86 @@ class TestHomePage:
         self.home_page.open()
 
     @allure.story("Хедер")
-    @allure.title("Проверка ссылки 'Register'")
-    @allure.severity(allure.severity_level.NORMAL)
-    def test_header_register_link_visible(self):
-        assert self.home_page.is_visible("a.ico-register"), "Ссылка Register не видна"
+    @allure.title("Проверка видимости логотипа")
+    @allure.severity(allure.severity_level.MINOR)
+    def test_logo_visible(self):
+        assert self.home_page.is_logo_visible(), "Логотип не виден"
 
     @allure.story("Хедер")
-    @allure.title("Проверка ссылки 'Log in'")
+    @allure.title("Проверка видимости элементов хедера")
     @allure.severity(allure.severity_level.NORMAL)
-    def test_header_login_link_visible(self):
-        assert self.home_page.is_visible("a.ico-login"), "Ссылка Log in не видна"
-
-    @allure.story("Хедер")
-    @allure.title("Проверка ссылки 'Shopping cart'")
-    @allure.severity(allure.severity_level.NORMAL)
-    def test_header_shopping_cart_link_visible(self):
-        # Уточняем: ищем ссылку внутри блока header-links
-        assert self.home_page.is_visible("#topcartlink a.ico-cart"), (
-            "Ссылка Shopping cart не видна"
+    def test_header_elements_visible(self):
+        assert self.home_page.is_register_link_visible(), "Ссылка Register не видна"
+        assert self.home_page.is_login_link_visible(), "Ссылка Log in не видна"
+        assert self.home_page.is_cart_link_visible(), "Ссылка Shopping cart не видна"
+        assert self.home_page.is_wishlist_link_visible(), "Ссылка Wishlist не видна"
+        assert self.home_page.is_search_field_visible(), (
+            "Поле поиска или кнопка Search не видны"
         )
 
-    @allure.story("Хедер")
-    @allure.title("Проверка ссылки 'Wishlist'")
+    @allure.story("Навигация")
+    @allure.title("Переход по ссылке 'Register'")
     @allure.severity(allure.severity_level.NORMAL)
-    def test_header_wishlist_link_visible(self):
-        assert self.home_page.is_visible(".header-links a.ico-wishlist"), (
-            "Ссылка Wishlist не видна"
+    def test_register_link_navigates(self):
+        self.home_page.click_register_link()
+        self.home_page.wait_for_url(f"{self.home_page.base_url}/register")
+        assert "/register" in self.home_page.get_current_url(), (
+            f"Ожидался /register, текущий: {self.home_page.get_current_url()}"
         )
 
-    @allure.story("Хедер")
-    @allure.title("Проверка поля поиска и кнопки Search")
+    @allure.story("Навигация")
+    @allure.title("Переход по ссылке 'Log in'")
     @allure.severity(allure.severity_level.NORMAL)
-    def test_header_search_field_visible(self):
-        assert self.home_page.is_visible("#small-searchterms"), "Поле поиска не видно"
-        assert self.home_page.is_visible("input[value='Search']"), (
-            "Кнопка Search не видна"
+    def test_login_link_navigates(self):
+        self.home_page.click_login_link()
+        self.home_page.wait_for_url(f"{self.home_page.base_url}/login")
+        assert "/login" in self.home_page.get_current_url(), (
+            f"Ожидался /login, текущий: {self.home_page.get_current_url()}"
+        )
+
+    @allure.story("Навигация")
+    @allure.title("Переход по ссылке 'Shopping cart'")
+    @allure.severity(allure.severity_level.NORMAL)
+    def test_cart_link_navigates(self):
+        self.home_page.click_cart_link()
+        self.home_page.wait_for_url(f"{self.home_page.base_url}/cart")
+        assert "/cart" in self.home_page.get_current_url(), (
+            f"Ожидался /cart, текущий: {self.home_page.get_current_url()}"
+        )
+
+    @allure.story("Навигация")
+    @allure.title("Переход по ссылке 'Wishlist'")
+    @allure.severity(allure.severity_level.NORMAL)
+    def test_wishlist_link_navigates(self):
+        self.home_page.click_wishlist_link()
+        self.home_page.wait_for_url(f"{self.home_page.base_url}/wishlist")
+        assert "/wishlist" in self.home_page.get_current_url(), (
+            f"Ожидался /wishlist, текущий: {self.home_page.get_current_url()}"
         )
 
     @allure.story("Навигация")
     @allure.title("Переход по пунктам верхнего меню")
     @allure.severity(allure.severity_level.NORMAL)
     @pytest.mark.parametrize(
-        "link_text, expected_path",
+        "expected_path",
         [
-            ("Books", "/books"),
-            ("Computers", "/computers"),
-            ("Electronics", "/electronics"),
-            ("Apparel & Shoes", "/apparel-shoes"),
-            ("Digital downloads", "/digital-downloads"),
-            ("Jewelry", "/jewelry"),
-            ("Gift Cards", "/gift-cards"),
+            "/books",
+            "/computers",
+            "/electronics",
+            "/apparel-shoes",
+            "/digital-downloads",
+            "/jewelry",
+            "/gift-cards",
         ],
     )
-    def test_top_menu_navigation(self, link_text, expected_path):
-        link_selector = f".top-menu a[href='{expected_path}']"
-        self.home_page.click(link_selector)
-        self.home_page.page.wait_for_url(
-            f"{self.home_page.base_url}{expected_path}", timeout=5000
-        )
-        assert expected_path in self.home_page.page.url, (
-            f"Ожидался путь {expected_path}, текущий URL: {self.home_page.page.url}"
+    def test_top_menu_navigation(self, expected_path):
+        self.home_page.click_top_menu_link_by_href(expected_path)
+        self.home_page.wait_for_url(f"{self.home_page.base_url}{expected_path}")
+        assert expected_path in self.home_page.get_current_url(), (
+            f"Ожидался путь {expected_path}, текущий URL: {self.home_page.get_current_url()}"
         )
 
-    @allure.story("Поиск")
-    @allure.title("Поиск существующего товара")
-    @allure.severity(allure.severity_level.NORMAL)
-    def test_search_existing_product(self):
-        search_input = "#small-searchterms"
-        search_button = "input[value='Search']"
-        self.home_page.fill(search_input, "computer")
-        self.home_page.click(search_button)
-        # Ждём появления результатов
-        self.home_page.page.wait_for_selector(
-            ".product-item", state="visible", timeout=5000
-        )
-        # Проверяем, что есть хотя бы один товар
-        items = self.home_page.page.locator(".product-item").count()
-        assert items > 0, "Результаты поиска не найдены"
-
-    @allure.story("Поиск")
-    @allure.title("Поиск несуществующего товара")
-    @allure.severity(allure.severity_level.NORMAL)
-    def test_search_nonexistent_product(self):
-        search_input = "#small-searchterms"
-        search_button = "input[value='Search']"
-        self.home_page.fill(search_input, "nonexistent")
-        self.home_page.click(search_button)
-        # Ожидаем сообщение об отсутствии результатов
-        self.home_page.page.wait_for_selector(".result", state="visible", timeout=5000)
-        result_text = self.home_page.page.locator(".result").text_content()
-        assert (
-            "No products were found" in result_text
-            or "No products found" in result_text
-        ), f"Неожиданное сообщение: {result_text}"
-
-    @allure.story("Блоки на главной")
-    @allure.title("Проверка блока Newsletter")
-    @allure.severity(allure.severity_level.MINOR)
-    def test_newsletter_block_visible(self):
-        assert self.home_page.is_visible("#newsletter-email"), "Поле email не видно"
-        assert self.home_page.is_visible("input[value='Subscribe']"), (
-            "Кнопка Subscribe не видна"
-        )
-
-    @allure.story("Блоки на главной")
-    @allure.title("Проверка блока Community Poll")
-    @allure.severity(allure.severity_level.NORMAL)
-    def test_community_poll_visible(self):
-        # 1. Проверяем текст вопроса
-        question_text = self.home_page.page.locator(
-            "text=Do you like nopCommerce?"
-        ).text_content()
-        assert (
-            question_text is not None and "Do you like nopCommerce?" in question_text
-        ), "Вопрос не отображается или неверный"
-
-        # 2. Проверяем видимость каждой радиокнопки и её текста
-        expected_options = ["Excellent", "Good", "Poor", "Very bad"]
-        for i, option_text in enumerate(expected_options, start=1):
-            radio_selector = f"#pollanswers-{i}"
-            label_selector = f"label[for='pollanswers-{i}']"
-
-            # Проверяем, что радио-кнопка видна
-            assert self.home_page.is_visible(radio_selector), (
-                f"Радиокнопка для '{option_text}' не видна"
-            )
-
-            # Проверяем, что подпись к кнопке содержит ожидаемый текст
-            label_text = self.home_page.page.locator(label_selector).text_content()
-            assert option_text in label_text, (
-                f"Ожидался текст '{option_text}', получено '{label_text}'"
-            )
-
-        # 3. Проверяем, что кнопка Vote видна
-        assert self.home_page.is_visible("input[value='Vote']"), "Кнопка Vote не видна"
-
-    @allure.story("Блоки на главной")
-    @allure.title("Голосование без авторизации показывает ошибку")
-    @allure.severity(allure.severity_level.NORMAL)
-    @pytest.mark.parametrize(
-        "option_id, option_text",
-        [
-            ("pollanswers-1", "Excellent"),
-            ("pollanswers-2", "Good"),
-            ("pollanswers-3", "Poor"),
-            ("pollanswers-4", "Very bad"),
-        ],
-    )
-    def test_community_poll_vote_without_login(self, option_id, option_text):
-        # Открываем главную страницу (без логина)
-        self.home_page.open()
-
-        # Выбираем радиокнопку
-        self.home_page.click(f"#{option_id}")
-        # Нажимаем кнопку Vote
-        self.home_page.click("input[value='Vote']")
-
-        # Ожидаем появления сообщения об ошибке и проверяем его текст
-        error_locator = "text=Only registered users can vote"
-        self.home_page.page.wait_for_selector(
-            error_locator, state="visible", timeout=5000
-        )
-        error_text = self.home_page.page.locator(error_locator).text_content()
-        assert "Only registered users can vote" in error_text, (
-            f"Неверное сообщение: {error_text}"
-        )
-
-    @allure.story("Блоки на главной")
-    @allure.title("Проверка блока Featured Products")
-    @allure.severity(allure.severity_level.NORMAL)
-    def test_featured_products_visible(self):
-        items = self.home_page.page.locator(".product-item").count()
-        assert items > 0, "В блоке Featured Products нет товаров"
-
-    @allure.story("Блоки на главной")
-    @allure.title("Проверка блока Popular Tags")
-    @allure.severity(allure.severity_level.MINOR)
-    def test_popular_tags_visible(self):
-        tags = self.home_page.page.locator("a[href^='/producttag/']").count()
-        assert tags > 0, "Теги не найдены"
-
-    @allure.story("Блоки на главной")
-    @allure.title("Проверка ссылки 'View all' в блоке Popular Tags")
-    @allure.severity(allure.severity_level.NORMAL)
-    def test_popular_tags_view_all_link(self):
-        # Находим ссылку "View all" внутри блока .view-all
-        view_all_link = ".view-all a"
-        # Проверяем, что ссылка видна
-        assert self.home_page.is_visible(view_all_link), "Ссылка 'View all' не видна"
-        # Кликаем по ссылке
-        self.home_page.click(view_all_link)
-        # Ожидаем перехода на страницу со всеми тегами
-        expected_path = "/producttag/all"
-        self.home_page.page.wait_for_url(
-            f"{self.home_page.base_url}{expected_path}", timeout=10000
-        )
-        assert expected_path in self.home_page.page.url, (
-            f"Ожидался путь {expected_path}, текущий URL: {self.home_page.page.url}"
-        )
-
-    @allure.story("Блоки на главной")
-    @allure.title("Проверка наличия тега 'digital' и перехода по нему")
-    @allure.severity(allure.severity_level.NORMAL)
-    def test_popular_tags_digital_tag(self):
-        # Ожидаем появления блока с тегами
-        self.home_page.page.wait_for_selector(".tags", state="visible", timeout=5000)
-
-        # 1. Проверяем, что тег "digital" присутствует в списке
-        digital_tag_selector = "a[href='/producttag/16/digital']"
-        assert self.home_page.is_visible(digital_tag_selector), (
-            "Тег 'digital' не найден в списке"
-        )
-
-        # 2. Кликаем по тегу "digital"
-        self.home_page.click(digital_tag_selector)
-
-        # 3. Ожидаем перехода на страницу тега
-        expected_path = "/producttag/16/digital"
-        self.home_page.page.wait_for_url(
-            f"{self.home_page.base_url}{expected_path}", timeout=10000
-        )
-        assert expected_path in self.home_page.page.url, (
-            f"Ожидался путь {expected_path}, текущий URL: {self.home_page.page.url}"
-        )
-
-        # 4. Проверяем, что на странице отображаются товары, связанные с тегом "digital"
-        self.home_page.page.wait_for_selector(
-            ".product-item", state="visible", timeout=5000
-        )
-        items = self.home_page.page.locator(".product-item").count()
-        assert items > 0, "На странице тега 'digital' не найдено товаров"
-
-    @allure.story("Нижний колонтитул")
+    @allure.story("Навигация")
     @allure.title("Переход по ссылкам в нижнем колонтитуле")
     @allure.severity(allure.severity_level.NORMAL)
     @pytest.mark.parametrize(
@@ -257,12 +105,91 @@ class TestHomePage:
         ],
     )
     def test_footer_links_navigation(self, link_text, expected_path):
-        # Ищем ссылку в футере
-        link_selector = f".footer a:has-text('{link_text}')"
-        self.home_page.click(link_selector)
-        self.home_page.page.wait_for_url(
-            f"{self.home_page.base_url}{expected_path}", timeout=5000
+        self.home_page.click_footer_link_by_text(link_text)
+        self.home_page.wait_for_url(f"{self.home_page.base_url}{expected_path}")
+        assert expected_path in self.home_page.get_current_url(), (
+            f"Ожидался путь {expected_path}, текущий URL: {self.home_page.get_current_url()}"
         )
-        assert expected_path in self.home_page.page.url, (
-            f"Ожидался путь {expected_path}, текущий URL: {self.home_page.page.url}"
+
+    @allure.story("Поиск")
+    @allure.title("Поиск существующего товара")
+    @allure.severity(allure.severity_level.NORMAL)
+    def test_search_existing_product(self):
+        self.home_page.search("computer")
+        assert self.home_page.get_search_results_count() > 0, (
+            "Результаты поиска не найдены"
+        )
+
+    @allure.story("Поиск")
+    @allure.title("Поиск несуществующего товара")
+    @allure.severity(allure.severity_level.NORMAL)
+    def test_search_nonexistent_product(self):
+        self.home_page.search("nonexistent")
+        message = self.home_page.get_search_message()
+        assert "No products" in message, f"Неожиданное сообщение: {message}"
+
+    @allure.story("Блоки на главной")
+    @allure.title("Проверка блоков Newsletter, Featured Products, Popular Tags")
+    @allure.severity(allure.severity_level.MINOR)
+    def test_home_blocks_visible(self):
+        assert self.home_page.is_newsletter_visible(), "Блок Newsletter не виден"
+        assert self.home_page.get_featured_products_count() > 0, (
+            "Нет товаров в Featured Products"
+        )
+        assert self.home_page.get_popular_tags_count() > 0, "Нет тегов в Popular Tags"
+
+    @allure.story("Community Poll")
+    @allure.title("Проверка отображения блока Community Poll")
+    @allure.severity(allure.severity_level.NORMAL)
+    def test_community_poll_visible(self):
+        assert "Do you like nopCommerce" in self.home_page.get_poll_question(), (
+            "Неверный вопрос в блоке опроса"
+        )
+        expected_options = ["Excellent", "Good", "Poor", "Very bad"]
+        for i, option_text in enumerate(expected_options, start=1):
+            answer_id = f"pollanswers-{i}"
+            assert self.home_page.is_poll_radio_visible(answer_id), (
+                f"Радиокнопка для '{option_text}' не видна"
+            )
+            label_text = self.home_page.get_poll_label_text(answer_id)
+            assert option_text in label_text, (
+                f"Ожидался текст '{option_text}', получено '{label_text}'"
+            )
+        assert self.home_page.is_poll_vote_visible(), "Кнопка Vote не видна"
+
+    @allure.story("Community Poll")
+    @allure.title("Голосование без авторизации показывает ошибку")
+    @allure.severity(allure.severity_level.NORMAL)
+    @pytest.mark.parametrize(
+        "option_id",
+        ["pollanswers-1", "pollanswers-2", "pollanswers-3", "pollanswers-4"],
+    )
+    def test_community_poll_vote_without_login(self, option_id):
+        self.home_page.select_poll_answer(option_id)
+        self.home_page.vote()
+        error = self.home_page.get_vote_error()
+        assert "Only registered users can vote" in error, f"Неверное сообщение: {error}"
+
+    @allure.story("Popular Tags")
+    @allure.title("Переход по ссылке 'View all'")
+    @allure.severity(allure.severity_level.NORMAL)
+    def test_popular_tags_view_all_link(self):
+        self.home_page.click_view_all_tags()
+        self.home_page.wait_for_url(f"{self.home_page.base_url}/producttag/all")
+        assert "/producttag/all" in self.home_page.get_current_url(), (
+            f"Ожидался путь /producttag/all, текущий: {self.home_page.get_current_url()}"
+        )
+
+    @allure.story("Popular Tags")
+    @allure.title("Переход по тегу 'digital'")
+    @allure.severity(allure.severity_level.NORMAL)
+    def test_popular_tags_digital_tag(self):
+        assert self.home_page.is_digital_tag_visible(), "Тег 'digital' не виден"
+        self.home_page.click_digital_tag()
+        self.home_page.wait_for_url(f"{self.home_page.base_url}/producttag/16/digital")
+        assert "/producttag/16/digital" in self.home_page.get_current_url(), (
+            f"Ожидался путь /producttag/16/digital, текущий: {self.home_page.get_current_url()}"
+        )
+        assert self.home_page.get_search_results_count() > 0, (
+            "На странице тега 'digital' не найдено товаров"
         )

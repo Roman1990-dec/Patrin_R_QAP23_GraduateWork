@@ -12,91 +12,94 @@ class TestDigitalDownloads:
         self.home_page.open()
         self.downloads_page = self.home_page.go_to_digital_downloads()
 
-    @allure.story("Навигация")
-    @allure.title("Переход в раздел Digital downloads")
+    @allure.story("Страница категории")
+    @allure.title("Проверка загрузки страницы Digital downloads")
     @allure.severity(allure.severity_level.NORMAL)
-    def test_digital_downloads_navigation(self):
-        assert "/digital-downloads" in self.downloads_page.page.url, (
-            "URL не соответствует ожидаемому"
+    @allure.description(
+        "Проверяет, что страница категории Digital downloads корректно "
+        "загружается: правильный URL, заголовок, элементы управления списком, "
+        "наличие товаров."
+    )
+    def test_digital_downloads_page_loaded(self):
+        assert "/digital-downloads" in self.downloads_page.get_current_url(), (
+            f"URL не соответствует ожидаемому: {self.downloads_page.get_current_url()}"
         )
-
-    @allure.story("Страница списка")
-    @allure.title("Проверка заголовка страницы")
-    @allure.severity(allure.severity_level.NORMAL)
-    def test_digital_downloads_page_title(self):
-        title = self.downloads_page.get_page_title()
-        assert "Digital downloads" in title, (
-            f"Заголовок не соответствует, получено: {title}"
+        assert "Digital downloads" in self.downloads_page.get_page_title(), (
+            "Заголовок страницы не соответствует ожидаемому"
         )
-
-    @allure.story("Страница списка")
-    @allure.title("Проверка наличия выпадающего списка сортировки")
-    @allure.severity(allure.severity_level.MINOR)
-    def test_digital_downloads_sort_by_visible(self):
         assert self.downloads_page.is_sort_by_visible(), "Список сортировки не виден"
-
-    @allure.story("Страница списка")
-    @allure.title("Проверка наличия выпадающего списка отображения")
-    @allure.severity(allure.severity_level.MINOR)
-    def test_digital_downloads_display_visible(self):
         assert self.downloads_page.is_display_visible(), "Список отображения не виден"
-
-    @allure.story("Страница списка")
-    @allure.title("Проверка наличия переключателя вида 'Grid'")
-    @allure.severity(allure.severity_level.MINOR)
-    def test_digital_downloads_view_as_grid_visible(self):
         assert self.downloads_page.is_view_as_grid_visible(), (
-            "Переключатель 'View as Grid' не виден"
+            "Переключатель вида отображения не виден"
         )
-
-    @allure.story("Страница списка")
-    @allure.title("Проверка, что на странице есть товары")
-    @allure.severity(allure.severity_level.NORMAL)
-    def test_digital_downloads_has_products(self):
-        count = self.downloads_page.get_product_count()
-        assert count > 0, "На странице нет товаров"
+        assert self.downloads_page.get_product_count() > 0, "На странице нет товаров"
 
     @allure.story("Карточка товара")
-    @allure.title("Открытие карточки '3rd Album'")
+    @allure.title("Проверка карточки товара '3rd Album'")
     @allure.severity(allure.severity_level.NORMAL)
-    def test_product_page_3rd_album_navigation(self):
+    @allure.description(
+        "Проверяет, что карточка товара '3rd Album' открывается корректно "
+        "и содержит ожидаемые данные: название, цену, кнопку 'Add to cart', "
+        "поле ввода количества."
+    )
+    def test_3rd_album_product_card(self):
         product_page = self.downloads_page.open_product_by_href("/album-3")
-        assert "/album-3" in product_page.page.url, "Не удалось открыть карточку товара"
 
-    @allure.story("Карточка товара")
-    @allure.title("Проверка названия товара")
-    @allure.severity(allure.severity_level.NORMAL)
-    def test_product_name(self):
-        product_page = self.downloads_page.open_product_by_href("/album-3")
-        name = product_page.get_product_name()
-        assert "3rd Album" in name, f"Название не соответствует, получено: {name}"
-
-    @allure.story("Карточка товара")
-    @allure.title("Проверка цены товара")
-    @allure.severity(allure.severity_level.NORMAL)
-    def test_product_price(self):
-        product_page = self.downloads_page.open_product_by_href("/album-3")
-        price = product_page.get_product_price()
-        assert "1.00" in price, f"Цена не соответствует, получено: {price}"
-
-    @allure.story("Карточка товара")
-    @allure.title("Проверка наличия кнопки 'Add to cart'")
-    @allure.severity(allure.severity_level.NORMAL)
-    def test_product_add_to_cart_visible(self):
-        product_page = self.downloads_page.open_product_by_href("/album-3")
+        assert "/album-3" in product_page.get_current_url(), (
+            f"Не удалось открыть карточку товара: {product_page.get_current_url()}"
+        )
+        assert "3rd Album" in product_page.get_product_name(), (
+            f"Название товара не соответствует: {product_page.get_product_name()}"
+        )
+        assert "1.00" in product_page.get_product_price(), (
+            f"Цена товара не соответствует: {product_page.get_product_price()}"
+        )
         assert product_page.is_add_to_cart_visible(), "Кнопка 'Add to cart' не видна"
-
-    @allure.story("Карточка товара")
-    @allure.title("Проверка наличия поля Qty")
-    @allure.severity(allure.severity_level.MINOR)
-    def test_product_qty_visible(self):
-        product_page = self.downloads_page.open_product_by_href("/album-3")
         assert product_page.is_qty_visible(), "Поле Qty не видно"
 
     @allure.story("Карточка товара")
-    @allure.title("Проверка ссылки на отзывы")
+    @allure.title("Проверка ссылки на отзывы в карточке товара")
     @allure.severity(allure.severity_level.MINOR)
-    def test_product_reviews_link_visible(self):
+    def test_3rd_album_reviews_link_visible(self):
         product_page = self.downloads_page.open_product_by_href("/album-3")
         reviews = product_page.get_reviews_text()
         assert "review" in reviews.lower(), "Ссылка на отзывы не найдена"
+
+    @allure.story("Страница категории")
+    @allure.title("Сортировка товаров по имени (A to Z)")
+    @allure.severity(allure.severity_level.MINOR)
+    def test_sort_by_name(self):
+        self.downloads_page.select_sort_by_name()
+        first_name = self.downloads_page.get_first_product_name()
+        assert "3rd Album" in first_name, (
+            f"После сортировки первым должен быть '3rd Album', получено: {first_name}"
+        )
+
+    @allure.story("Страница категории")
+    @allure.title("Сортировка товаров по цене (возрастание)")
+    @allure.severity(allure.severity_level.MINOR)
+    def test_sort_by_price_low_to_high(self):
+        self.downloads_page.select_sort_by_price_low_to_high()
+        first_name = self.downloads_page.get_first_product_name()
+        assert first_name, "После сортировки не удалось получить имя первого товара"
+
+    @allure.story("Страница категории")
+    @allure.title("Изменение количества отображаемых товаров на 4")
+    @allure.severity(allure.severity_level.MINOR)
+    def test_display_4_products(self):
+        self.downloads_page.select_display_4()
+        assert self.downloads_page.get_product_count() <= 4, (
+            f"Ожидалось не более 4 товаров, получено: {self.downloads_page.get_product_count()}"
+        )
+
+    @allure.story("Страница категории")
+    @allure.title("Переключение вида отображения на список")
+    @allure.severity(allure.severity_level.MINOR)
+    def test_view_as_list(self):
+        self.downloads_page.select_view_as_list()
+        assert self.downloads_page.get_product_count() > 0, (
+            "После переключения на вид 'список' товары не отображаются"
+        )
+        assert "viewmode=list" in self.downloads_page.get_current_url(), (
+            f"URL не содержит 'viewmode=list': {self.downloads_page.get_current_url()}"
+        )

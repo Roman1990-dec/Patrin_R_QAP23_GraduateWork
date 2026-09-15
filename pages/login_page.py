@@ -1,54 +1,64 @@
+from playwright.sync_api import Page
+
 from pages.base_page import BasePage
 
 
 class LoginPage(BasePage):
-    # Локаторы
-    EMAIL_INPUT = "#Email"
-    PASSWORD_INPUT = "#Password"
-    LOGIN_BUTTON = "input[value='Log in']"
-    ERROR_MESSAGE = ".validation-summary-errors li"
-    LOGOUT_LINK = "a.ico-logout"
-    ACCOUNT_LINK = "div.header-links a.account"
+    def __init__(self, page: Page, base_url: str):
+        super().__init__(page, base_url)
+        self.email_input = page.locator("#Email")
+        self.password_input = page.locator("#Password")
+        self.login_button = page.locator("input[value='Log in']")
+        self.login_link_header = page.locator("a.ico-login")
+        self.error_message = page.locator(".validation-summary-errors li")
+        self.logout_link = page.locator("a.ico-logout")
+        self.account_link = page.locator("div.header-links a.account")
+        self.login_form_header = page.locator("h1")
+        self.remember_me_checkbox = page.locator("#RememberMe")
+        self.forgot_password_link = page.locator(".forgot-password a")
 
-    def login(self, email: str, password: str):
-        """Заполняет форму и нажимает кнопку входа"""
-        self.fill(self.EMAIL_INPUT, email)
-        self.fill(self.PASSWORD_INPUT, password)
-        self.click(self.LOGIN_BUTTON)
+    def login(self, email: str, password: str) -> "LoginPage":
+        self.fill(self.email_input, email)
+        self.fill(self.password_input, password)
+        self.click(self.login_button)
         return self
 
     def get_error_message(self) -> str:
-        """Возвращает текст ошибки, если она появилась"""
-        return self.get_text(self.ERROR_MESSAGE)
+        return self.get_text(self.error_message)
 
     def is_logged_in(self) -> bool:
-        """Проверяет, видна ли ссылка 'Log out'"""
-        return self.is_visible(self.LOGOUT_LINK)
+        return self.is_visible(self.logout_link)
 
     def get_account_email(self) -> str:
-        """ "Возвращает текст ссылки на аккаунт (email)"""
-        return self.get_text(self.ACCOUNT_LINK)
+        return self.get_text(self.account_link)
 
     def is_account_correct(self, expected_email: str) -> bool:
-        """ "Проверяет, видна ли ссылка аккаунта с корректным текстом (email)"""
-        try:
-            self.page.wait_for_selector(
-                self.ACCOUNT_LINK, state="visible", timeout=3000
-            )
-            actual_email = self.get_account_email()
-            return actual_email == expected_email
-        except TimeoutError:
+        if not self.is_visible(self.account_link):
             return False
+        return self.get_account_email() == expected_email
 
-    def open(self, url: str = ""):
-        """Открывает страницу логина (или переданный url, если указан)"""
+    def open(self, url: str = "") -> "LoginPage":
         if url:
             return super().open(url)
         return super().open("/login")
 
+    def is_forgot_password_link_visible(self) -> bool:
+        return self.is_visible(self.forgot_password_link)
+
     def click_forgot_password(self):
-        """Кликает по ссылке 'Forgot password?' и возвращает объект PasswordRecoveryPage."""
-        self.click(".forgot-password a")
+        self.click(self.forgot_password_link)
         from pages.password_recovery_page import PasswordRecoveryPage
 
         return PasswordRecoveryPage(self.page, self.base_url)
+
+    def submit_empty_form(self) -> "LoginPage":
+        self.click(self.login_button)
+        return self
+
+    def logout(self) -> "LoginPage":
+        self.click(self.logout_link)
+        self.wait_visible(self.login_link_header)
+        return self
+
+    def is_logout_link_visible(self) -> bool:
+        return self.is_visible(self.logout_link)

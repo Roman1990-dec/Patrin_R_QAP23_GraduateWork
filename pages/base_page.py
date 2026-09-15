@@ -1,35 +1,42 @@
-from playwright.sync_api import Page
+from playwright.sync_api import Locator, Page, TimeoutError
 
 
 class BasePage:
-    """Базовый класс для всех Page Object'ов."""
+    DEFAULT_TIMEOUT = 10000
 
-    def __init__(self, page: Page, base_url : str = "https://demowebshop.tricentis.com"):
+    def __init__(self, page: Page, base_url: str = "https://demowebshop.tricentis.com"):
         self.page = page
         self.base_url = base_url
 
     def open(self, url: str = ""):
-        """Открывает полный URL, склеивая base_url + url."""
-        full_url = self.base_url + url
-        self.page.goto(full_url)
+        self.page.goto(self.base_url + url)
         return self
 
-    def click(self, selector: str):
-        """Клик по элементу с автоматическим ожиданием."""
-        self.page.locator(selector).click()
+    def wait_visible(self, locator: Locator, timeout: int | None = None) -> Locator:
+        locator.wait_for(state="visible", timeout=timeout or self.DEFAULT_TIMEOUT)
+        return locator
+
+    def is_visible(self, locator: Locator, timeout: int = 3000) -> bool:
+        try:
+            locator.wait_for(state="visible", timeout=timeout)
+            return True
+        except TimeoutError:
+            return False
+
+    def click(self, locator: Locator) -> "BasePage":
+        self.wait_visible(locator)
+        locator.click()
         return self
 
-    def fill(self, selector: str, text: str):
-        """Очистить поле и ввести текст."""
-        locator = self.page.locator(selector)
+    def fill(self, locator: Locator, text: str) -> "BasePage":
+        self.wait_visible(locator)
         locator.clear()
         locator.fill(text)
         return self
 
-    def get_text(self, selector: str) -> str:
-        """Возвращает текстовое содержимое элемента."""
-        return self.page.locator(selector).text_content()
+    def get_text(self, locator: Locator) -> str:
+        self.wait_visible(locator)
+        return locator.text_content() or ""
 
-    def is_visible(self, selector: str) -> bool:
-        """Проверяет, видим ли элемент на странице."""
-        return self.page.locator(selector).is_visible()
+    def get_current_url(self) -> str:
+        return self.page.url

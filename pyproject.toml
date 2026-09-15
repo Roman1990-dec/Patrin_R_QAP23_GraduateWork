@@ -5,15 +5,15 @@ description = "Дипломная работа по курсу Автомати�
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "ruff>=0.14.0",
     "pytest>=8.4.0",
-    "mypy>=1.16.0",
-    "requests>=2.34.2",
-    "selenium>=4.44.0",
-    "webdriver-manager>=4.1.1",
+    "playwright>=1.46.0",
     "pytest-playwright>=0.8.0",
-    "allure-python-commons>=2.16.0",
     "allure-pytest>=2.16.0",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.0",
 ]
 
 [tool.ruff]
@@ -36,17 +36,3 @@ python_files = "test_*.py"
 python_classes = "Test*"
 python_functions = "test_*"
 addopts = "-v --tb=short"
-
-[tool.mypy]
-python_version = "3.13"
-warn_return_any = true
-warn_unused_configs = true
-ignore_missing_imports = true
-strict_optional = true
-warn_no_return = true
-warn_redundant_casts = true
-
-[dependency-groups]
-dev = [
-    "pytest-base-url>=2.1.0",
-]
