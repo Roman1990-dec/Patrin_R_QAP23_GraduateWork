@@ -61,7 +61,9 @@ def base_url():
 
 ```
 .
-
+├── .github/
+│   └── workflows/
+│       └── run_tests.yml       # CI/CD pipeline (GitHub Actions)
 ├── conftest.py                 # Глобальные фикстуры и хуки Allure
 ├── pages/                      # Page Object'ы
 │   ├── base_page.py            # Базовый класс с общими методами
@@ -70,14 +72,16 @@ def base_url():
 │   ├── registration_page.py    # Страница регистрации
 │   ├── digital_downloads_page.py  # Страница категории Digital downloads
 │   ├── product_page.py         # Страница товара
-│   └── password_recovery_page.py # Страница восстановления пароля
+│   └── password_recovery_page.py  # Страница восстановления пароля
 ├── tests/                      # Тестовые сценарии
 │   ├── test_home.py            # Тесты главной страницы
 │   ├── test_login.py           # Тесты авторизации
 │   ├── test_registration.py    # Тесты регистрации
 │   ├── test_password_recovery.py # Тесты восстановления пароля
 │   └── test_digital_downloads.py # Тесты раздела Digital downloads
-├── .gitignore                  # Исключаемые файлы из Git
+├── .gitignore                  # Исключения для Git
+├── Dockerfile                  # Описание Docker-образа
+├── docker-compose.yml          # Оркестрация контейнера
 ├── pyproject.toml              # Описание проекта и зависимостей
 ├── uv.lock                     # Фиксация версий зависимостей
 └── README.md                   # Документация проекта
